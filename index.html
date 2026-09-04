@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Skills Development Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+                <i class="fa-solid fa-graduation-cap fa-lg me-2"></i> Skills Portal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="skills.html">Browse Skills</a></li>
+                    <li class="nav-item"><a class="nav-link" href="courses.html">All Courses</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-2" id="authNav">
+                    <button class="btn btn-outline-light btn-sm" onclick="openBackendConfig()" title="Configure Vercel Backend URL">
+                        <i class="fa-solid fa-gear me-1"></i> API Settings
+                    </button>
+                    <a href="login.html" class="btn btn-light btn-sm text-primary fw-bold">Login</a>
+                    <a href="register.html" class="btn btn-warning btn-sm fw-bold">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-5 text-white text-center" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);">
+        <div class="container py-4">
+            <h1 class="display-4 fw-bold mb-3">Accelerate Your Professional Career</h1>
+            <p class="lead mb-4 mx-auto" style="max-width: 750px;">
+                Learn industry-standard skills with curated video lectures, validate your knowledge with 10-question quizzes, and earn verifiable luxury certificates of achievement.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="courses.html" class="btn btn-warning btn-lg px-4 fw-bold text-dark shadow-sm">
+                    <i class="fa-solid fa-play me-2"></i> Start Learning Now
+                </a>
+                <a href="skills.html" class="btn btn-outline-light btn-lg px-4">
+                    <i class="fa-solid fa-layer-group me-2"></i> Explore Pathways
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Features / Workflow -->
+    <div class="container my-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">How It Works</h2>
+            <p class="text-muted">A complete 5-step learning and certification pipeline</p>
+        </div>
+        <div class="row g-4 text-center">
+            <div class="col-md">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="p-3 bg-light-primary text-primary rounded-circle d-inline-flex mx-auto mb-3">
+                        <i class="fa-solid fa-user-plus fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">1. Register & Login</h5>
+                    <p class="text-muted small">Create your student profile and access your personalized learning dashboard.</p>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="p-3 bg-light-info text-info rounded-circle d-inline-flex mx-auto mb-3">
+                        <i class="fa-solid fa-video fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">2. Watch Lectures</h5>
+                    <p class="text-muted small">Stream structured video lectures and complete module lessons.</p>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="p-3 bg-light-warning text-warning rounded-circle d-inline-flex mx-auto mb-3">
+                        <i class="fa-solid fa-list-check fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">3. 10-Question Quiz</h5>
+                    <p class="text-muted small">Take the timed course assessment to test your comprehension.</p>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="p-3 bg-light-success text-success rounded-circle d-inline-flex mx-auto mb-3">
+                        <i class="fa-solid fa-award fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">4. Score 7/10 to Pass</h5>
+                    <p class="text-muted small">Achieve 70%+ to instantly unlock and download your certificate.</p>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="p-3 bg-light-danger text-danger rounded-circle d-inline-flex mx-auto mb-3">
+                        <i class="fa-solid fa-star fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">5. Review & Rate</h5>
+                    <p class="text-muted small">Leave ratings and feedback on your completed training.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Courses Section -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1">Featured Training Courses</h2>
+                    <p class="text-muted mb-0">Explore our most popular skill development tracks</p>
+                </div>
+                <a href="courses.html" class="btn btn-outline-primary">View All Courses <i class="fa-solid fa-arrow-right ms-1"></i></a>
+            </div>
+
+            <div class="row g-4" id="coursesGrid">
+                <div class="col-12 text-center py-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="text-muted mt-2">Loading courses from Vercel backend...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-1">Student Skills Development Portal &copy; 2026</p>
+            <small class="text-muted">Deployed Frontend (Render) &bull; API Backend (Vercel)</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = getCurrentUser();
+            if (user) {
+                document.getElementById('authNav').innerHTML = `
+                    <button class="btn btn-outline-light btn-sm" onclick="openBackendConfig()" title="Configure Vercel Backend URL">
+                        <i class="fa-solid fa-gear me-1"></i> API Settings
+                    </button>
+                    <a href="${user.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html'}" class="btn btn-light btn-sm text-primary fw-bold">
+                        <i class="fa-solid fa-gauge me-1"></i> Dashboard (${user.name})
+                    </a>
+                    <button onclick="logoutUser()" class="btn btn-outline-light btn-sm">Logout</button>
+                `;
+            }
+
+            // Load Courses from Vercel API
+            try {
+                const res = await API.courses.getAll();
+                const grid = document.getElementById('coursesGrid');
+                if (res.data && res.data.length > 0) {
+                    grid.innerHTML = res.data.slice(0, 6).map(c => `
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 shadow-sm overflow-hidden">
+                                <div class="p-3 bg-primary text-white d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-warning text-dark">${c.skill_name || 'Skill'}</span>
+                                    <small><i class="fa-regular fa-clock me-1"></i>${c.duration}</small>
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title fw-bold mb-2">${c.course_name}</h5>
+                                    <p class="text-muted small mb-2"><i class="fa-solid fa-chalkboard-user me-1 text-primary"></i>${c.instructor}</p>
+                                    <p class="card-text text-muted small flex-grow-1">${c.description ? c.description.substring(0, 90) + '...' : ''}</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                                        <div class="text-warning small">
+                                            <i class="fa-solid fa-star"></i> ${c.avg_rating > 0 ? c.avg_rating : 'New'} (${c.feedback_count || 0})
+                                        </div>
+                                        <a href="learning.html?course_id=${c.id}" class="btn btn-sm btn-primary">
+                                            <i class="fa-solid fa-play me-1"></i> Enroll & Learn
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    grid.innerHTML = '<div class="col-12 text-center text-muted">No courses available.</div>';
+                }
+            } catch (err) {
+                document.getElementById('coursesGrid').innerHTML = `
+                    <div class="col-12 text-center py-4">
+                        <div class="alert alert-warning d-inline-block">
+                            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                            Could not load courses from backend API. Please click <strong>API Settings</strong> above to check your Vercel URL.
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

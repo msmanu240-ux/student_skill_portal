@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Classroom - Skills Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold" href="dashboard.html">
+                <i class="fa-solid fa-graduation-cap me-2"></i> Skills Portal
+            </a>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Dashboard</a>
+                <button onclick="logoutUser()" class="btn btn-warning btn-sm fw-bold">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div id="loadingBox" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2">Loading course classroom...</p>
+        </div>
+
+        <div id="classroomContent" class="d-none">
+            <div class="row g-4">
+                <!-- Video Player Column -->
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4 bg-white">
+                        <div class="ratio ratio-16x9 bg-black">
+                            <iframe id="videoPlayer" src="" title="Course Lecture" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                                <span class="badge bg-primary px-3 py-2" id="courseSkill">Pathway</span>
+                                <span class="text-muted small"><i class="fa-regular fa-clock me-1"></i> <span id="courseDuration">Duration</span></span>
+                            </div>
+                            <h3 class="fw-bold mb-2" id="courseTitle">Course Title</h3>
+                            <p class="text-muted small mb-3"><i class="fa-solid fa-chalkboard-user me-1 text-primary"></i> Instructor: <strong id="courseInstructor" class="text-dark">Instructor</strong></p>
+                            <hr>
+                            <h6 class="fw-bold">About This Course</h6>
+                            <p class="text-muted small" id="courseDescription">Description</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning Milestones & Actions -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                        <h5 class="fw-bold mb-3"><i class="fa-solid fa-list-check me-2 text-primary"></i>Learning Steps</h5>
+                        <ul class="list-group list-group-flush mb-4">
+                            <li class="list-group-item d-flex align-items-center px-0">
+                                <i class="fa-solid fa-circle-check text-success fa-lg me-3"></i>
+                                <div>
+                                    <h6 class="mb-0 fw-bold small">1. Enrolled</h6>
+                                    <small class="text-muted">Access granted</small>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center px-0">
+                                <i class="fa-solid fa-circle-play text-primary fa-lg me-3"></i>
+                                <div>
+                                    <h6 class="mb-0 fw-bold small">2. Watch Video Lecture</h6>
+                                    <small class="text-muted">Master curriculum topics</small>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center px-0">
+                                <i class="fa-solid fa-file-circle-question text-warning fa-lg me-3"></i>
+                                <div>
+                                    <h6 class="mb-0 fw-bold small">3. 10-Question Quiz</h6>
+                                    <small class="text-muted">Pass with score &ge; 7/10</small>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center px-0">
+                                <i class="fa-solid fa-award text-danger fa-lg me-3"></i>
+                                <div>
+                                    <h6 class="mb-0 fw-bold small">4. Earn Certificate</h6>
+                                    <small class="text-muted">Instant verified credential</small>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="d-grid gap-2" id="actionArea">
+                            <a id="btnTakeQuiz" href="#" class="btn btn-warning py-2 fw-bold text-dark shadow-sm">
+                                <i class="fa-solid fa-circle-question me-1"></i> Take 10-Question Quiz Now
+                            </a>
+                            <a id="btnCertificate" href="#" class="btn btn-success py-2 fw-bold d-none">
+                                <i class="fa-solid fa-award me-1"></i> View Earned Certificate
+                            </a>
+                            <a id="btnFeedback" href="#" class="btn btn-outline-secondary py-2 small d-none">
+                                <i class="fa-solid fa-comment-dots me-1"></i> Leave Course Review
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = parseInt(urlParams.get('course_id')) || 1;
+
+        function getYouTubeEmbedUrl(url) {
+            if (!url) return '';
+            if (url.includes('playlist?list=')) {
+                const listId = url.split('list=')[1]?.split('&')[0];
+                return `https://www.youtube.com/embed/videoseries?list=${listId}`;
+            }
+            if (url.includes('youtu.be/')) {
+                const videoId = url.split('youtu.be/')[1]?.split('?')[0];
+                return `https://www.youtube.com/embed/${videoId}`;
+            }
+            if (url.includes('watch?v=')) {
+                const videoId = url.split('watch?v=')[1]?.split('&')[0];
+                return `https://www.youtube.com/embed/${videoId}`;
+            }
+            return url;
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = requireAuth('student');
+            if (!user) return;
+
+            try {
+                // Auto-enroll and set progress to 50%
+                await API.enrollments.enroll(user.id, courseId);
+                await API.enrollments.startLearning(user.id, courseId);
+
+                // Fetch course details
+                const res = await API.courses.getById(courseId, user.id);
+                const c = res.data;
+
+                document.getElementById('courseTitle').innerText = c.course_name;
+                document.getElementById('courseInstructor').innerText = c.instructor;
+                document.getElementById('courseDuration').innerText = c.duration;
+                document.getElementById('courseSkill').innerText = c.skill_name || 'General';
+                document.getElementById('courseDescription').innerText = c.description || 'Watch the lecture video completely before taking the knowledge assessment.';
+                document.getElementById('videoPlayer').src = getYouTubeEmbedUrl(c.youtube_url);
+
+                document.getElementById('btnTakeQuiz').href = `quiz.html?course_id=${c.id}`;
+
+                if (c.enrollment_status === 'Completed') {
+                    const btnCert = document.getElementById('btnCertificate');
+                    const btnFb = document.getElementById('btnFeedback');
+                    btnCert.href = `certificate.html?course_id=${c.id}`;
+                    btnFb.href = `feedback.html?course_id=${c.id}`;
+                    btnCert.classList.remove('d-none');
+                    btnFb.classList.remove('d-none');
+                }
+
+                document.getElementById('loadingBox').classList.add('d-none');
+                document.getElementById('classroomContent').classList.remove('d-none');
+            } catch (err) {
+                document.getElementById('loadingBox').innerHTML = `
+                    <div class="alert alert-danger py-4 text-center">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i> Error loading classroom from Vercel API: ${err.message}
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Result - Skills Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white mb-4">
+                    <div id="resultIcon" class="mb-3"></div>
+                    <h2 class="fw-bold mb-1" id="resultTitle">Assessment Completed</h2>
+                    <p class="text-muted small mb-4" id="resultSubtitle">Score calculation completed</p>
+
+                    <div class="p-4 bg-light rounded-4 border mb-4">
+                        <h1 class="display-3 fw-bold mb-0" id="scoreDisplay">0 / 10</h1>
+                        <p class="text-muted small mb-0 mt-1" id="percentageDisplay">0% Passing Grade</p>
+                    </div>
+
+                    <div class="alert py-3 mb-4" id="resultAlert"></div>
+
+                    <div class="d-flex justify-content-center gap-2 flex-wrap" id="actionButtons">
+                        <!-- Buttons populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <a href="dashboard.html" class="btn btn-link text-decoration-none text-muted">
+                        <i class="fa-solid fa-arrow-left me-1"></i> Back to Student Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = parseInt(urlParams.get('course_id')) || 1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = requireAuth('student');
+            if (!user) return;
+
+            const stored = sessionStorage.getItem('latest_quiz_result');
+            if (!stored) {
+                window.location.href = `quiz.html?course_id=${courseId}`;
+                return;
+            }
+
+            const data = JSON.parse(stored);
+            const passed = data.passed || (data.score >= 7);
+
+            document.getElementById('scoreDisplay').innerText = `${data.score} / ${data.total}`;
+            document.getElementById('percentageDisplay').innerText = `${data.percentage}% Grade (Passing requirement: 70%)`;
+
+            const iconDiv = document.getElementById('resultIcon');
+            const alertDiv = document.getElementById('resultAlert');
+            const actionsDiv = document.getElementById('actionButtons');
+
+            if (passed) {
+                iconDiv.innerHTML = `
+                    <div class="p-4 bg-light-success text-success rounded-circle d-inline-flex mx-auto">
+                        <i class="fa-solid fa-award fa-3x"></i>
+                    </div>
+                `;
+                document.getElementById('resultTitle').innerText = '🎉 Congratulations! You Passed!';
+                document.getElementById('resultSubtitle').innerText = 'You demonstrated mastery of the curriculum topics.';
+
+                alertDiv.className = 'alert alert-success py-3 text-start';
+                alertDiv.innerHTML = `
+                    <h6 class="fw-bold mb-1"><i class="fa-solid fa-circle-check me-2"></i>Assessment Criteria Passed!</h6>
+                    <small>Your verified Certificate of Achievement has been generated automatically and added to your portfolio.</small>
+                `;
+
+                actionsDiv.innerHTML = `
+                    <a href="certificate.html?course_id=${courseId}" class="btn btn-success px-4 py-2 fw-bold shadow-sm">
+                        <i class="fa-solid fa-award me-1"></i> View & Print Certificate
+                    </a>
+                    <a href="feedback.html?course_id=${courseId}" class="btn btn-outline-primary px-3 py-2">
+                        <i class="fa-solid fa-star me-1"></i> Rate Course
+                    </a>
+                `;
+            } else {
+                iconDiv.innerHTML = `
+                    <div class="p-4 bg-light-danger text-danger rounded-circle d-inline-flex mx-auto">
+                        <i class="fa-solid fa-rotate-left fa-3x"></i>
+                    </div>
+                `;
+                document.getElementById('resultTitle').innerText = 'Score Below Passing Threshold';
+                document.getElementById('resultSubtitle').innerText = 'Passing score required is 7 / 10 or higher.';
+
+                alertDiv.className = 'alert alert-warning py-3 text-start';
+                alertDiv.innerHTML = `
+                    <h6 class="fw-bold mb-1"><i class="fa-solid fa-circle-exclamation me-2"></i>Please Try Again</h6>
+                    <small>Review the course video lectures and re-take the assessment to earn your certificate.</small>
+                `;
+
+                actionsDiv.innerHTML = `
+                    <a href="quiz.html?course_id=${courseId}" class="btn btn-warning text-dark px-4 py-2 fw-bold shadow-sm">
+                        <i class="fa-solid fa-rotate-right me-1"></i> Try Again / Retake Quiz
+                    </a>
+                    <a href="learning.html?course_id=${courseId}" class="btn btn-outline-secondary px-3 py-2">
+                        <i class="fa-solid fa-play me-1"></i> Review Lecture
+                    </a>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

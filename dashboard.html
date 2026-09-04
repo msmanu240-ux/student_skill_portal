@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Skills Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fa-solid fa-graduation-cap me-2"></i> Skills Portal
+            </a>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <button class="btn btn-outline-light btn-sm" onclick="openBackendConfig()">
+                    <i class="fa-solid fa-gear me-1"></i> API Settings
+                </button>
+                <span class="badge bg-light text-primary px-3 py-2 fw-bold" id="userNameBadge">Student</span>
+                <button onclick="logoutUser()" class="btn btn-warning btn-sm fw-bold">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4 py-4">
+        <!-- Dynamic Header Banner -->
+        <div class="p-4 rounded-4 shadow-sm mb-4 text-white" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h2 class="fw-bold mb-1" id="greetingHeader">Welcome to Your Learning Desk!</h2>
+                    <p class="mb-0 text-white-50">Stream lectures, pass 10-question assessments (7/10+ to pass), and unlock certified badges.</p>
+                </div>
+                <div>
+                    <a href="courses.html" class="btn btn-warning fw-bold text-dark px-3 py-2 shadow-sm">
+                        <i class="fa-solid fa-plus me-1"></i> Browse New Courses
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 Metric Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="card border-0 shadow-sm p-3 bg-white h-100 rounded-3">
+                    <div class="d-flex align-items-center">
+                        <div class="p-3 bg-light-primary text-primary rounded-3 me-3">
+                            <i class="fa-solid fa-book-bookmark fa-2x"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-0 fw-bold" id="statEnrolled">0</h4>
+                            <small class="text-muted">Enrolled Courses</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card border-0 shadow-sm p-3 bg-white h-100 rounded-3">
+                    <div class="d-flex align-items-center">
+                        <div class="p-3 bg-light-success text-success rounded-3 me-3">
+                            <i class="fa-solid fa-circle-check fa-2x"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-0 fw-bold" id="statCompleted">0</h4>
+                            <small class="text-muted">Completed</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card border-0 shadow-sm p-3 bg-white h-100 rounded-3">
+                    <div class="d-flex align-items-center">
+                        <div class="p-3 bg-light-warning text-warning rounded-3 me-3">
+                            <i class="fa-solid fa-spinner fa-2x"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-0 fw-bold" id="statInProgress">0</h4>
+                            <small class="text-muted">In Progress</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="card border-0 shadow-sm p-3 bg-white h-100 rounded-3">
+                    <div class="d-flex align-items-center">
+                        <div class="p-3 bg-light-danger text-danger rounded-3 me-3">
+                            <i class="fa-solid fa-award fa-2x"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-0 fw-bold" id="statCertificates">0</h4>
+                            <small class="text-muted">Certificates Earned</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gamified Skill Badges Shelf -->
+        <div class="card border-0 shadow-sm p-4 mb-4 rounded-4 bg-white">
+            <h5 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-ribbon me-2 text-warning"></i>My Skill Achievement Badges</h5>
+            <div class="row g-3" id="badgesContainer">
+                <div class="col-12 text-center py-2 text-muted small">Loading achievement milestones...</div>
+            </div>
+        </div>
+
+        <!-- Enrolled Courses Study Table -->
+        <div class="card border-0 shadow-sm p-4 mb-4 rounded-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-graduation-cap me-2 text-primary"></i>My Active Courses & Learning Progress</h5>
+            </div>
+
+            <div class="table-responsive" id="tableContainer">
+                <div class="text-center py-4 text-muted">Loading your enrolled courses...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        const BADGE_DEFINITIONS = [
+            { id: 1, name: 'Python Specialist', icon: 'fa-brands fa-python', color: '#f59e0b', bg: '#fef3c7' },
+            { id: 2, name: 'Web Architect', icon: 'fa-solid fa-code', color: '#3b82f6', bg: '#dbeafe' },
+            { id: 3, name: 'CSS Designer', icon: 'fa-solid fa-compass-drafting', color: '#10b981', bg: '#d1fae5' },
+            { id: 4, name: 'Data Analyst', icon: 'fa-solid fa-chart-pie', color: '#8b5cf6', bg: '#f3e8ff' },
+            { id: 5, name: 'AI Engineer', icon: 'fa-solid fa-brain', color: '#ec4899', bg: '#fce7f3' },
+            { id: 6, name: 'Growth Marketer', icon: 'fa-solid fa-bullhorn', color: '#f43f5e', bg: '#ffe4e6' },
+            { id: 7, name: 'Orator Master', icon: 'fa-solid fa-comments', color: '#06b6d4', bg: '#cffafe' },
+            { id: 8, name: 'Database Admin', icon: 'fa-solid fa-database', color: '#14b8a6', bg: '#ccfbf1' }
+        ];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = requireAuth('student');
+            if (!user) return;
+
+            document.getElementById('userNameBadge').innerText = user.name;
+
+            // Dynamic Greeting
+            const hr = new Date().getHours();
+            const timeGreeting = hr < 12 ? 'Good Morning' : (hr < 17 ? 'Good Afternoon' : 'Good Evening');
+            document.getElementById('greetingHeader').innerHTML = `<i class="fa-solid fa-rocket me-2"></i>${timeGreeting}, ${user.name}!`;
+
+            // Fetch Stats from Vercel API
+            try {
+                const statsRes = await API.stats.getStudentStats(user.id);
+                const s = statsRes.data;
+                document.getElementById('statEnrolled').innerText = s.total_enrolled || 0;
+                document.getElementById('statCompleted').innerText = s.completed_courses || 0;
+                document.getElementById('statInProgress').innerText = s.in_progress_courses || 0;
+                document.getElementById('statCertificates').innerText = s.certificates_earned || 0;
+
+                const completedIds = (s.completed_course_ids || []).map(Number);
+                renderBadges(completedIds);
+            } catch (err) {
+                console.error(err);
+                renderBadges([]);
+            }
+
+            // Fetch Enrolled Courses
+            try {
+                const res = await API.enrollments.getByStudent(user.id);
+                renderCoursesTable(res.data || []);
+            } catch (err) {
+                document.getElementById('tableContainer').innerHTML = `
+                    <div class="alert alert-warning py-3 text-center">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i> Failed to connect to Vercel API. Click <strong>API Settings</strong> above to check your backend URL.
+                    </div>
+                `;
+            }
+        });
+
+        function renderBadges(completedIds) {
+            const container = document.getElementById('badgesContainer');
+            container.innerHTML = BADGE_DEFINITIONS.map(b => {
+                const unlocked = completedIds.includes(b.id);
+                return `
+                    <div class="col-6 col-sm-4 col-md-3">
+                        <div class="p-3 border rounded-3 h-100 bg-light text-center" style="opacity: ${unlocked ? '1' : '0.3'}; filter: ${unlocked ? 'none' : 'grayscale(100%)'}; border-color: ${unlocked ? b.color : '#e2e8f0'} !important;">
+                            <div class="d-inline-flex p-3 rounded-circle mb-2" style="background-color: ${b.bg}; color: ${b.color};">
+                                <i class="${b.icon} fa-2x"></i>
+                            </div>
+                            <h6 class="fw-bold mb-1 small text-dark">${b.name}</h6>
+                            <span class="badge ${unlocked ? 'bg-success' : 'bg-secondary'} px-2 py-1" style="font-size: 9px;">
+                                ${unlocked ? '<i class="fa-solid fa-check me-1"></i>Unlocked' : '<i class="fa-solid fa-lock me-1"></i>Locked'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCoursesTable(courses) {
+            const container = document.getElementById('tableContainer');
+            if (courses.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fa-solid fa-folder-open fa-3x text-muted mb-3"></i>
+                        <p class="text-muted mb-3">You are not enrolled in any courses yet.</p>
+                        <a href="courses.html" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass me-1"></i> Browse & Enroll</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Pathway</th>
+                            <th>Instructor & Duration</th>
+                            <th>Status</th>
+                            <th style="min-width: 140px;">Progress</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${courses.map(c => `
+                            <tr>
+                                <td><strong>${c.course_name}</strong></td>
+                                <td><span class="badge bg-secondary">${c.skill_name || 'Skill'}</span></td>
+                                <td><small class="text-muted">${c.instructor}<br>${c.duration}</small></td>
+                                <td>
+                                    ${c.status === 'Completed' 
+                                        ? '<span class="badge bg-success"><i class="fa-solid fa-circle-check me-1"></i>Completed</span>'
+                                        : (c.status === 'In Progress' 
+                                            ? '<span class="badge bg-warning text-dark"><i class="fa-solid fa-spinner me-1"></i>In Progress</span>'
+                                            : '<span class="badge bg-info"><i class="fa-solid fa-play me-1"></i>Enrolled</span>')}
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: ${c.progress}%"></div>
+                                    </div>
+                                    <small class="text-muted mt-1 d-block font-monospace">${c.progress}%</small>
+                                </td>
+                                <td>
+                                    <a href="learning.html?course_id=${c.course_id}" class="btn btn-sm btn-primary">
+                                        <i class="fa-solid fa-play me-1"></i> Study
+                                    </a>
+                                    ${c.status === 'Completed' ? `
+                                        <a href="certificate.html?course_id=${c.course_id}" class="btn btn-sm btn-outline-success ms-1">
+                                            <i class="fa-solid fa-award me-1"></i> Certificate
+                                        </a>
+                                        <a href="feedback.html?course_id=${c.course_id}" class="btn btn-sm btn-outline-secondary ms-1">
+                                            <i class="fa-solid fa-comment-dots me-1"></i> Review
+                                        </a>
+                                    ` : `
+                                        <a href="quiz.html?course_id=${c.course_id}" class="btn btn-sm btn-warning text-dark fw-bold ms-1">
+                                            <i class="fa-solid fa-circle-question me-1"></i> Take Quiz
+                                        </a>
+                                    `}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+    </script>
+</body>
+</html>
